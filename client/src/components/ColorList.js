@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosWithAuth from "../axiosWithAuth";
 
 const initialColor = {
     color: "",
@@ -21,19 +21,19 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
         // Make a put request to save your updated color
         // think about where will you get the id from...
         // where is is saved right now?
-        axios
-            .put(`http://localhost:5000/api/colors/${colors.id}`, colorToEdit)
+        axiosWithAuth()
+            .put(`/colors/${colorToEdit.id}`, colorToEdit)
+
             .then((res) => {
-                console.log("saveedit;res", res);
+                console.log("saveedit;res", res.data);
                 getColorList();
-                history.push("/bubblepage");
             });
     };
 
     const deleteColor = (color) => {
         // make a delete request to delete this color
 
-        axios
+        axiosWithAuth()
             .delete(`http://localhost:5000/api/colors/${color.id}`)
             .then((res) => {
                 console.log("deletecolor;res", res);
