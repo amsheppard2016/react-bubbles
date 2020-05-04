@@ -10,26 +10,29 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
     console.log(colors);
     const [editing, setEditing] = useState(false);
     const [colorToEdit, setColorToEdit] = useState(initialColor);
-    // const [addColor, setAddColor] = useState(initialColor);
+    const [addColor, setAddColor] = useState(initialColor);
 
     const editColor = (color) => {
         setEditing(true);
         setColorToEdit(color);
     };
 
-    // const addNew = (e) => {
-    //     e.preventDefault;
-    //     axiosWithAuth()
-    //         .post("/colors/", addColor)
+    const addNew = (e) => {
+        e.preventDefault();
+        // Make a put request to save your updated color
+        // think about where will you get the id from...
+        // where is is saved right now?
+        axiosWithAuth()
+            .post("/colors/", addColor)
 
-    //         .then((res) => {
-    //             console.log("saveedit;res", res.data);
-    //             getColorList({ ...ColorList, addColor });
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // };
+            .then((res) => {
+                console.log("saveedit;res", res.data);
+                getColorList();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     const saveEdit = (e) => {
         e.preventDefault();
@@ -55,7 +58,9 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
             .delete(`/colors/${color.id}`)
             .then((res) => {
                 console.log("deletecolor;res", res);
+                setEditing(false);
                 getColorList();
+
                 history.push("/bubblepage");
             })
             .catch((err) => {
@@ -89,6 +94,39 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
                     </li>
                 ))}
             </ul>
+            {!editing && (
+                <form onSubmit={addNew}>
+                    <legend>Add color</legend>
+                    <label>
+                        color name:
+                        <input
+                            onChange={(e) =>
+                                setAddColor({
+                                    ...addColor,
+                                    color: e.target.value,
+                                })
+                            }
+                        />
+                    </label>
+                    <label>
+                        hex code:
+                        <input
+                            onChange={(e) =>
+                                setAddColor({
+                                    ...addColor,
+                                    code: { hex: e.target.value },
+                                })
+                            }
+                        />
+                    </label>
+                    <div className="button-row">
+                        <button type="submit">save</button>
+                        <button onClick={() => setEditing(false)}>
+                            cancel
+                        </button>
+                    </div>
+                </form>
+            )}
             {editing && (
                 <form onSubmit={saveEdit}>
                     <legend>edit color</legend>
@@ -125,35 +163,6 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
                 </form>
             )}
             <div className="spacer" />
-
-            {/* <form onSubmit={addNew}>
-                <legend>Add color</legend>
-                <label>
-                    color name:
-                    <input
-                        onChange={(e) =>
-                            setAddColor({
-                                ...addColor,
-                                color: e.target.value,
-                            })
-                        }
-                    />
-                </label>
-                <label>
-                    hex code:
-                    <input
-                        onChange={(e) =>
-                            setAddColor({
-                                ...addColor,
-                                code: { hex: e.target.value },
-                            })
-                        }
-                    />
-                </label>
-                <div className="button-row">
-                    <button type="submit">save</button>
-                </div>
-            </form> */}
 
             {/* stretch - build another form here to add a color */}
         </div>
