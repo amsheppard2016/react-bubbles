@@ -27,7 +27,12 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
 
             .then((res) => {
                 console.log("saveedit;res", res.data);
+                setAddColor({
+                    color: "",
+                    code: { hex: "" },
+                });
                 getColorList();
+                console.log("addColor");
             })
             .catch((err) => {
                 console.log(err);
@@ -44,6 +49,7 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
 
             .then((res) => {
                 console.log("saveedit;res", res.data);
+                setEditing(false);
                 getColorList();
             })
             .catch((err) => {
@@ -70,7 +76,7 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
 
     return (
         <div className="colors-wrap">
-            <p>colors</p>
+            <h2>Colors</h2>
             <ul>
                 {colors.map((color) => (
                     <li key={color.color} onClick={() => editColor(color)}>
@@ -96,9 +102,9 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
             </ul>
             {!editing && (
                 <form onSubmit={addNew}>
-                    <legend>Add color</legend>
+                    <legend>Add Color</legend>
                     <label>
-                        color name:
+                        Color Name:
                         <input
                             onChange={(e) =>
                                 setAddColor({
@@ -106,10 +112,11 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
                                     color: e.target.value,
                                 })
                             }
+                            value={addColor.color}
                         />
                     </label>
                     <label>
-                        hex code:
+                        Hex Code:
                         <input
                             onChange={(e) =>
                                 setAddColor({
@@ -117,21 +124,22 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
                                     code: { hex: e.target.value },
                                 })
                             }
+                            value={addColor.code.hex}
                         />
                     </label>
                     <div className="button-row">
-                        <button type="submit">save</button>
+                        <button type="submit">Save</button>
                         <button onClick={() => setEditing(false)}>
-                            cancel
+                            Cancel
                         </button>
                     </div>
                 </form>
             )}
             {editing && (
                 <form onSubmit={saveEdit}>
-                    <legend>edit color</legend>
+                    <legend>Edit Color</legend>
                     <label>
-                        color name:
+                        Color Name:
                         <input
                             onChange={(e) =>
                                 setColorToEdit({
@@ -143,7 +151,7 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
                         />
                     </label>
                     <label>
-                        hex code:
+                        Hex Code:
                         <input
                             onChange={(e) =>
                                 setColorToEdit({
@@ -155,9 +163,9 @@ const ColorList = ({ colors, history, getColorList, updateColors }) => {
                         />
                     </label>
                     <div className="button-row">
-                        <button type="submit">save</button>
+                        <button type="submit">Save</button>
                         <button onClick={() => setEditing(false)}>
-                            cancel
+                            Cancel
                         </button>
                     </div>
                 </form>
